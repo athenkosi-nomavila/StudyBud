@@ -18,3 +18,16 @@ export type Upload = {
   status: "processing" | "ready";
   cardCount: number;
 };
+
+export type KeyIdea = {
+  heading: string;
+  body: string;
+};
+
+export type StudyNotes = {
+  moduleId: string;
+  title: string;
+  summary: string;
+  keyIdeas: KeyIdea[];
+  source: string; // e.g. "Week 3 – Memory, p. 2–6"
+};
