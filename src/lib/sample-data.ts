@@ -1,5 +1,5 @@
 // Placeholder content until real data is saved (step 6).
-import type { StudyModule, StudyNotes, Upload } from "./types";
+import type { QuizQuestion, StudyModule, StudyNotes, Upload } from "./types";
 
 export const sampleModules: StudyModule[] = [
   {
@@ -71,6 +71,44 @@ export const sampleNotes: StudyNotes[] = [
   },
 ];
 
+export const sampleQuiz: QuizQuestion[] = [
+  {
+    id: "q1",
+    moduleId: "psychology-101",
+    question: "What moves info from short-term into long-term memory?",
+    options: ["Retrieval", "Encoding", "Rehearsal", "Forgetting"],
+    answerIndex: 2,
+    explanation:
+      "Encoding gets it in. Rehearsal, repeating or using it, is what moves it to long-term memory.",
+    source: "Week 3 – Memory, p. 4",
+  },
+  {
+    id: "q2",
+    moduleId: "psychology-101",
+    question: "Which stage is about pulling a memory back out?",
+    options: ["Storage", "Retrieval", "Encoding", "Attention"],
+    answerIndex: 1,
+    explanation:
+      "Retrieval is getting a memory back out. Practising it, like quizzing yourself, makes it easier.",
+    source: "Week 3 – Memory, p. 6",
+  },
+  {
+    id: "q3",
+    moduleId: "psychology-101",
+    question: "What helps new information stick when you encode it?",
+    options: [
+      "Reading it faster",
+      "Linking it to what you already know",
+      "Highlighting everything",
+      "Studying with music",
+    ],
+    answerIndex: 1,
+    explanation:
+      "Meaning helps: connecting new ideas to things you already know makes them easier to store.",
+    source: "Week 3 – Memory, p. 3",
+  },
+];
+
 export const sampleStreakDays = 5;
 
 export function getSampleModule(id: string) {
@@ -83,4 +121,8 @@ export function getSampleUploads(moduleId: string) {
 
 export function getSampleNotes(moduleId: string) {
   return sampleNotes.find((n) => n.moduleId === moduleId);
+}
+
+export function getSampleQuiz(moduleId: string) {
+  return sampleQuiz.filter((q) => q.moduleId === moduleId);
 }

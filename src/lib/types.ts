@@ -31,3 +31,13 @@ export type StudyNotes = {
   keyIdeas: KeyIdea[];
   source: string; // e.g. "Week 3 – Memory, p. 2–6"
 };
+
+export type QuizQuestion = {
+  id: string;
+  moduleId: string;
+  question: string;
+  options: string[];
+  answerIndex: number;
+  explanation: string;
+  source: string;
+};
