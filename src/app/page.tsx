@@ -13,7 +13,7 @@ export default function Home() {
         <header className="flex items-center justify-between">
           <h1 className="text-[26px] font-extrabold tracking-tight">StudyBud</h1>
           <span
-            className="flex h-10 items-center gap-1.5 rounded-full border-2 border-ink bg-white px-3.5 text-[15px] font-extrabold"
+            className="border-ink flex h-10 items-center gap-1.5 rounded-full border-2 bg-white px-3.5 text-[15px] font-extrabold"
             aria-label={`${sampleStreakDays} day streak`}
           >
             <FlameIcon />

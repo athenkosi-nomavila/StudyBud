@@ -16,7 +16,7 @@ export function ModuleList({ modules }: { modules: StudyModule[] }) {
         <h2 className="text-xl font-extrabold">Modules</h2>
         <button
           type="button"
-          className="h-11 rounded-full border-2 border-ink bg-white px-4 text-[15px] font-extrabold"
+          className="border-ink h-11 rounded-full border-2 bg-white px-4 text-[15px] font-extrabold"
         >
           + Add
         </button>
@@ -27,7 +27,7 @@ export function ModuleList({ modules }: { modules: StudyModule[] }) {
           <li key={module.id}>
             <Link
               href={`/modules/${module.id}`}
-              className={`flex items-center justify-between rounded-[22px] border-2 border-ink px-[18px] py-4 ${colorClasses[module.color]}`}
+              className={`border-ink flex items-center justify-between rounded-[22px] border-2 px-[18px] py-4 ${colorClasses[module.color]}`}
             >
               <span className="flex flex-col gap-0.5">
                 <span className="text-[19px] font-extrabold">{module.name}</span>
