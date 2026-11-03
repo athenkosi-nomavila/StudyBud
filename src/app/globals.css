@@ -1,7 +1,7 @@
 @import "tailwindcss";
 
-/* StudyBud "Pop" design tokens */
-@theme inline {
+/* StudyBud "Pop" design tokens. Use these (e.g. bg-coral, border-ink) instead of raw hex values. */
+@theme {
   --color-ground: #f1edff;
   --color-ink: #14121f;
   --color-ink-soft: #4a4560;
@@ -9,13 +9,16 @@
   --color-lime: #c8f169;
   --color-sky: #9fd8ff;
   --color-butter: #ffd66b;
+  --shadow-pop: 5px 5px 0 var(--color-ink);
+  --shadow-pop-sm: 4px 4px 0 var(--color-ink);
+}
+
+@theme inline {
   --font-sans: var(--font-bricolage), system-ui, sans-serif;
-  --shadow-pop: 5px 5px 0 #14121f;
-  --shadow-pop-sm: 4px 4px 0 #14121f;
 }
 
 body {
-  background: #f1edff;
-  color: #14121f;
+  background: var(--color-ground);
+  color: var(--color-ink);
   font-family: var(--font-bricolage), system-ui, sans-serif;
 }
