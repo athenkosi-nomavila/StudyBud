@@ -1,13 +1,7 @@
 import Link from "next/link";
-import type { ModuleColor, StudyModule } from "@/lib/types";
+import { moduleBgClass } from "@/lib/colors";
+import type { StudyModule } from "@/lib/types";
 import { ArrowRightIcon } from "../icons";
-
-const colorClasses: Record<ModuleColor, string> = {
-  lime: "bg-lime",
-  sky: "bg-sky",
-  butter: "bg-butter",
-  coral: "bg-coral",
-};
 
 export function ModuleList({ modules }: { modules: StudyModule[] }) {
   return (
@@ -27,7 +21,7 @@ export function ModuleList({ modules }: { modules: StudyModule[] }) {
           <li key={module.id}>
             <Link
               href={`/modules/${module.id}`}
-              className={`border-ink flex items-center justify-between rounded-[22px] border-2 px-[18px] py-4 ${colorClasses[module.color]}`}
+              className={`border-ink flex items-center justify-between rounded-[22px] border-2 px-[18px] py-4 ${moduleBgClass[module.color]}`}
             >
               <span className="flex flex-col gap-0.5">
                 <span className="text-[19px] font-extrabold">{module.name}</span>
