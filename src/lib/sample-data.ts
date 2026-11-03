@@ -1,5 +1,5 @@
 // Placeholder content until real data is saved (step 6).
-import type { QuizQuestion, StudyModule, StudyNotes, Upload } from "./types";
+import type { Flashcard, QuizQuestion, StudyModule, StudyNotes, Upload } from "./types";
 
 export const sampleModules: StudyModule[] = [
   {
@@ -109,6 +109,37 @@ export const sampleQuiz: QuizQuestion[] = [
   },
 ];
 
+export const sampleCards: Flashcard[] = [
+  {
+    id: "c1",
+    moduleId: "psychology-101",
+    front: "What are the three stages of memory?",
+    back: "Encoding, storage, retrieval",
+    source: "Week 3 – Memory, p. 2",
+  },
+  {
+    id: "c2",
+    moduleId: "psychology-101",
+    front: "What moves information into long-term memory?",
+    back: "Rehearsal: repeating or using it",
+    source: "Week 3 – Memory, p. 4",
+  },
+  {
+    id: "c3",
+    moduleId: "anatomy",
+    front: "How many bones are in the adult human body?",
+    back: "206",
+    source: "Skeletal system, p. 1",
+  },
+  {
+    id: "c4",
+    moduleId: "anatomy",
+    front: "What is the longest bone in the body?",
+    back: "The femur (thigh bone)",
+    source: "Skeletal system, p. 3",
+  },
+];
+
 export const sampleStreakDays = 5;
 
 export function getSampleModule(id: string) {
@@ -125,4 +156,8 @@ export function getSampleNotes(moduleId: string) {
 
 export function getSampleQuiz(moduleId: string) {
   return sampleQuiz.filter((q) => q.moduleId === moduleId);
+}
+
+export function getSampleCards(moduleId?: string) {
+  return moduleId ? sampleCards.filter((c) => c.moduleId === moduleId) : sampleCards;
 }

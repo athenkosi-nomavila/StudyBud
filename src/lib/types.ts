@@ -41,3 +41,11 @@ export type QuizQuestion = {
   explanation: string;
   source: string;
 };
+
+export type Flashcard = {
+  id: string;
+  moduleId: string;
+  front: string;
+  back: string;
+  source: string;
+};
