@@ -90,3 +90,12 @@ export function QuizIcon(props: IconProps) {
     </Svg>
   );
 }
+
+export function CameraIcon(props: IconProps) {
+  return (
+    <Svg {...props}>
+      <path d="M4 8h3l2-3h6l2 3h3v11H4z" />
+      <circle cx="12" cy="13" r="3.5" />
+    </Svg>
+  );
+}
