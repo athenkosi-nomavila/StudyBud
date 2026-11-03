@@ -64,3 +64,29 @@ export function FlameIcon({ size = 16 }: IconProps) {
     </svg>
   );
 }
+
+export function BackIcon(props: IconProps) {
+  return (
+    <Svg {...props}>
+      <path d="M15 6l-6 6 6 6" />
+    </Svg>
+  );
+}
+
+export function NotesIcon(props: IconProps) {
+  return (
+    <Svg {...props}>
+      <path d="M6 3h9l4 4v14H6z" />
+      <path d="M9 12h7M9 16h7" />
+    </Svg>
+  );
+}
+
+export function QuizIcon(props: IconProps) {
+  return (
+    <Svg {...props}>
+      <circle cx="12" cy="12" r="9" />
+      <path d="M9.5 9.5a2.5 2.5 0 1 1 3.5 2.3c-.6.3-1 .9-1 1.6M12 17h.01" />
+    </Svg>
+  );
+}
