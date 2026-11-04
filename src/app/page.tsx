@@ -2,10 +2,15 @@ import { BottomNav } from "@/components/BottomNav";
 import { FlameIcon } from "@/components/icons";
 import { ModuleList } from "@/components/home/ModuleList";
 import { TodayReviewCard } from "@/components/home/TodayReviewCard";
-import { sampleModules, sampleStreakDays } from "@/lib/sample-data";
+import { getModules } from "@/lib/db/modules";
+import { sampleStreakDays } from "@/lib/sample-data";
 
-export default function Home() {
-  const cardsDue = sampleModules.reduce((total, m) => total + m.cardsDue, 0);
+// Always read fresh data instead of building the page once.
+export const dynamic = "force-dynamic";
+
+export default async function Home() {
+  const modules = await getModules();
+  const cardsDue = modules.reduce((total, m) => total + m.cardsDue, 0);
 
   return (
     <>
@@ -22,7 +27,7 @@ export default function Home() {
         </header>
 
         <TodayReviewCard cardsDue={cardsDue} />
-        <ModuleList modules={sampleModules} />
+        <ModuleList modules={modules} />
       </main>
       <BottomNav />
     </>
