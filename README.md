@@ -19,8 +19,9 @@ The SQL files live in `supabase/`. Run them in the Supabase dashboard under **SQ
 
 1. `schema.sql` creates the tables. Run it once.
 2. `storage.sql` adds the private file bucket for uploads. Run it once.
-3. `seed.sql` is optional and loads the sample content for testing.
-4. `clear-sample.sql` removes the sample content. Run it before real use.
+3. `upload-text.sql` adds the text pulled out of each upload. Run it once.
+4. `seed.sql` is optional and loads the sample content for testing.
+5. `clear-sample.sql` removes the sample content. Run it before real use.
 
 The app reads the database from the server only, using two environment variables. Never commit them:
 
