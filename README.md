@@ -13,6 +13,19 @@ npm run dev
 
 Then open http://localhost:3000.
 
+## Database (Supabase)
+
+The SQL files live in `supabase/`. Run them in the Supabase dashboard under **SQL Editor**:
+
+1. `schema.sql` creates the tables. Run it once.
+2. `seed.sql` is optional and loads the sample content for testing.
+3. `clear-sample.sql` removes the sample content. Run it before real use.
+
+The app reads the database from the server only, using two environment variables. Never commit them:
+
+- `SUPABASE_URL`: the Project URL (Project Settings → API)
+- `SUPABASE_SECRET_KEY`: the secret (service_role) key
+
 ## Checks
 
 ```bash
