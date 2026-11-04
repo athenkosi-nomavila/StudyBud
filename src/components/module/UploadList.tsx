@@ -56,7 +56,7 @@ function UploadRow({ upload }: { upload: Upload }) {
             <span className="bg-lime block h-full w-1/2 animate-pulse" />
           </span>
         ) : (
-          <span className="text-ink-soft text-[13px] font-semibold">{upload.cardCount} cards</span>
+          <span className="text-ink-soft text-[13px] font-semibold">Ready</span>
         )}
       </span>
     </li>

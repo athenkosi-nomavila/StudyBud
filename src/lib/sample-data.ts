@@ -20,7 +20,6 @@ export const sampleUploads: Upload[] = [
     name: "Week 3 – Memory",
     kind: "pdf",
     status: "ready",
-    cardCount: 24,
   },
   {
     id: "u2",
@@ -28,7 +27,6 @@ export const sampleUploads: Upload[] = [
     name: "Lecture 4 slides",
     kind: "slides",
     status: "ready",
-    cardCount: 18,
   },
   {
     id: "u3",
@@ -36,7 +34,6 @@ export const sampleUploads: Upload[] = [
     name: "Handwritten notes",
     kind: "photo",
     status: "processing",
-    cardCount: 0,
   },
   {
     id: "u4",
@@ -44,7 +41,6 @@ export const sampleUploads: Upload[] = [
     name: "Skeletal system",
     kind: "pdf",
     status: "ready",
-    cardCount: 31,
   },
 ];
 

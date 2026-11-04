@@ -26,6 +26,8 @@ The app reads the database from the server only, using two environment variables
 - `SUPABASE_URL`: the Project URL (Project Settings → API)
 - `SUPABASE_SECRET_KEY`: the secret (service_role) key
 
+To run locally, put both in a `.env.local` file in the project root. Git ignores it.
+
 ## Checks
 
 ```bash

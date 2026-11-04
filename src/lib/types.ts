@@ -16,7 +16,6 @@ export type Upload = {
   name: string;
   kind: UploadKind;
   status: "processing" | "ready";
-  cardCount: number;
 };
 
 export type KeyIdea = {

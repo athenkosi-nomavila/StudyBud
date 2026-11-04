@@ -62,3 +62,6 @@ alter table uploads enable row level security;
 alter table notes enable row level security;
 alter table quiz_questions enable row level security;
 alter table flashcards enable row level security;
+
+-- New Supabase projects don't give the secret key's role access to new tables.
+grant select, insert, update, delete on all tables in schema public to service_role;
