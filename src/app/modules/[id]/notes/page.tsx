@@ -2,14 +2,15 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import { BackLink } from "@/components/BackLink";
 import { KeyIdeaList } from "@/components/notes/KeyIdeaList";
-import { getSampleModule, getSampleNotes } from "@/lib/sample-data";
+import { getModule } from "@/lib/db/modules";
+import { getNotes } from "@/lib/db/study";
 
 export default async function NotesPage({ params }: { params: Promise<{ id: string }> }) {
   const { id } = await params;
-  const studyModule = getSampleModule(id);
+  const studyModule = await getModule(id);
   if (!studyModule) notFound();
 
-  const notes = getSampleNotes(id);
+  const notes = await getNotes(id);
 
   return (
     <>

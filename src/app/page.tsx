@@ -3,10 +3,12 @@ import { FlameIcon } from "@/components/icons";
 import { ModuleList } from "@/components/home/ModuleList";
 import { TodayReviewCard } from "@/components/home/TodayReviewCard";
 import { getModules } from "@/lib/db/modules";
-import { sampleStreakDays } from "@/lib/sample-data";
 
 // Always read fresh data instead of building the page once.
 export const dynamic = "force-dynamic";
+
+// Placeholder until study history is saved.
+const STREAK_DAYS = 5;
 
 export default async function Home() {
   const modules = await getModules();
@@ -19,10 +21,10 @@ export default async function Home() {
           <h1 className="text-[26px] font-extrabold tracking-tight">StudyBud</h1>
           <span
             className="border-ink flex h-10 items-center gap-1.5 rounded-full border-2 bg-white px-3.5 text-[15px] font-extrabold"
-            aria-label={`${sampleStreakDays} day streak`}
+            aria-label={`${STREAK_DAYS} day streak`}
           >
             <FlameIcon />
-            {sampleStreakDays}
+            {STREAK_DAYS}
           </span>
         </header>
 

@@ -1,6 +1,6 @@
 import { BottomNav } from "@/components/BottomNav";
 import { UploadForm } from "@/components/upload/UploadForm";
-import { getSampleModule, sampleModules } from "@/lib/sample-data";
+import { getModules } from "@/lib/db/modules";
 
 export default async function UploadPage({
   searchParams,
@@ -8,12 +8,14 @@ export default async function UploadPage({
   searchParams: Promise<{ module?: string }>;
 }) {
   const { module: moduleId } = await searchParams;
+  const modules = await getModules();
+  const defaultModuleId = modules.find((m) => m.id === moduleId)?.id;
 
   return (
     <>
       <main className="mx-auto flex max-w-md flex-col gap-6 px-5 pt-7 pb-32">
         <h1 className="text-[30px] font-extrabold tracking-tight">Add notes</h1>
-        <UploadForm modules={sampleModules} defaultModuleId={getSampleModule(moduleId ?? "")?.id} />
+        <UploadForm modules={modules} defaultModuleId={defaultModuleId} />
       </main>
       <BottomNav />
     </>
