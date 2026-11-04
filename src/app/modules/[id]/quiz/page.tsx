@@ -2,15 +2,16 @@ import { notFound } from "next/navigation";
 import { BackLink } from "@/components/BackLink";
 import { QuizRunner } from "@/components/quiz/QuizRunner";
 import { shuffleQuiz } from "@/lib/quiz";
-import { getSampleModule, getSampleQuiz } from "@/lib/sample-data";
+import { getModule } from "@/lib/db/modules";
+import { getQuiz } from "@/lib/db/study";
 
 export default async function QuizPage({ params }: { params: Promise<{ id: string }> }) {
   const { id } = await params;
-  const studyModule = getSampleModule(id);
+  const studyModule = await getModule(id);
   if (!studyModule) notFound();
 
   // Shuffled per visit so she can't just remember answer positions.
-  const questions = shuffleQuiz(getSampleQuiz(id));
+  const questions = shuffleQuiz(await getQuiz(id));
 
   return (
     <main className="mx-auto flex max-w-md flex-col gap-5 px-5 pt-5 pb-10">

@@ -1,13 +1,14 @@
 import { notFound } from "next/navigation";
 import { BackLink } from "@/components/BackLink";
 import { CardReview } from "@/components/cards/CardReview";
-import { getSampleCards, getSampleModule } from "@/lib/sample-data";
+import { getModule } from "@/lib/db/modules";
+import { getModuleCards } from "@/lib/db/study";
 
 export default async function ModuleCardsPage({ params }: { params: Promise<{ id: string }> }) {
   const { id } = await params;
-  if (!getSampleModule(id)) notFound();
+  if (!(await getModule(id))) notFound();
 
-  const cards = getSampleCards(id);
+  const cards = await getModuleCards(id);
 
   return (
     <main className="mx-auto flex max-w-md flex-col gap-5 px-5 pt-5 pb-10">
