@@ -16,7 +16,7 @@ export default async function QuizPage({ params }: { params: Promise<{ id: strin
   return (
     <main className="mx-auto flex max-w-md flex-col gap-5 px-5 pt-5 pb-10">
       {questions.length > 0 ? (
-        <QuizRunner questions={questions} exitHref={`/modules/${id}`} />
+        <QuizRunner questions={questions} subtitle={studyModule.name} exitHref={`/modules/${id}`} />
       ) : (
         <>
           <BackLink href={`/modules/${id}`} />

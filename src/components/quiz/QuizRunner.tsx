@@ -10,10 +10,12 @@ import type { QuizQuestion } from "@/lib/types";
 
 type Props = {
   questions: QuizQuestion[];
+  /** Shown under the "Quiz" title: the module name. */
+  subtitle: string;
   exitHref: string;
 };
 
-export function QuizRunner({ questions: initialQuestions, exitHref }: Props) {
+export function QuizRunner({ questions: initialQuestions, subtitle, exitHref }: Props) {
   const [questions, setQuestions] = useState(initialQuestions);
   const [index, setIndex] = useState(0);
   const [picked, setPicked] = useState<number | null>(null);
@@ -63,6 +65,14 @@ export function QuizRunner({ questions: initialQuestions, exitHref }: Props) {
         </span>
       </div>
 
+      <header>
+        <h1 className="text-[30px] leading-none font-extrabold tracking-tight">Quiz</h1>
+        <p className="text-ink-soft pt-1.5 text-[15px] font-semibold">{subtitle}</p>
+        <p className="pt-3 text-[17px] font-semibold">
+          Pick an answer. You&apos;ll see why after each one.
+        </p>
+      </header>
+
       {isFinished ? (
         <div className="border-ink bg-butter shadow-pop flex flex-col items-center gap-4 rounded-[28px] border-2 p-7 text-center">
           <p className="text-[15px] font-semibold">Your score</p>
@@ -79,9 +89,9 @@ export function QuizRunner({ questions: initialQuestions, exitHref }: Props) {
         </div>
       ) : (
         <>
-          <h1 className="text-[26px] leading-tight font-extrabold tracking-tight">
+          <h2 className="text-[26px] leading-tight font-extrabold tracking-tight">
             {question.question}
-          </h1>
+          </h2>
 
           <div className="flex flex-col gap-2.5">
             {question.options.map((option, optionIndex) => (

@@ -14,7 +14,12 @@ export default async function UploadPage({
   return (
     <>
       <main className="mx-auto flex max-w-md flex-col gap-6 px-5 pt-7 pb-32">
-        <h1 className="text-[30px] font-extrabold tracking-tight">Add notes</h1>
+        <header>
+          <h1 className="text-[30px] font-extrabold tracking-tight">Add notes</h1>
+          <p className="pt-1 text-[17px] font-semibold">
+            Upload lecture notes or slides to study from.
+          </p>
+        </header>
         <UploadForm modules={modules} defaultModuleId={defaultModuleId} />
       </main>
       <BottomNav />

@@ -17,6 +17,7 @@ export function ModuleHeader({ module }: { module: StudyModule }) {
         )}
       </div>
       <h1 className="text-[40px] leading-none font-extrabold tracking-tight">{module.name}</h1>
+      <p className="text-[17px] font-semibold">Study with notes, a quiz or flashcards.</p>
     </header>
   );
 }
