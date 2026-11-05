@@ -87,10 +87,12 @@ export async function scheduleCard(cardId: string, rating: Rating): Promise<void
     .single();
   if (error) throw error;
 
-  const intervalDays = nextInterval(data.interval_days, rating);
+  const gapDays = nextInterval(data.interval_days, rating);
+  // A missed card comes back tomorrow but counts as "still learning" (0) until she gets it right.
+  const intervalDays = rating === "missed" ? 0 : gapDays;
   const { error: updateError } = await db
     .from("flashcards")
-    .update({ interval_days: intervalDays, due_at: dueDate(intervalDays).toISOString() })
+    .update({ interval_days: intervalDays, due_at: dueDate(gapDays).toISOString() })
     .eq("id", cardId);
   if (updateError) throw updateError;
 
