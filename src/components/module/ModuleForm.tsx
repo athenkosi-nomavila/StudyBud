@@ -1,7 +1,7 @@
 "use client";
 
 import { useActionState } from "react";
-import { addModule } from "@/app/modules/new/actions";
+import type { ModuleFormState } from "@/app/modules/actions";
 import { moduleBgClass } from "@/lib/colors";
 import type { ModuleColor } from "@/lib/types";
 
@@ -14,8 +14,16 @@ const COLORS: { value: ModuleColor; label: string }[] = [
 
 const FIELD = "border-ink h-13 rounded-2xl border-2 bg-white px-3.5 text-[17px] font-extrabold";
 
-export function NewModuleForm() {
-  const [state, formAction, isPending] = useActionState(addModule, { message: "" });
+type Props = {
+  /** A server action that saves the form. */
+  action: (state: ModuleFormState, form: FormData) => Promise<ModuleFormState>;
+  /** The module being edited, if any. */
+  initial?: { name: string; color: ModuleColor; examDate?: string };
+  submitLabel: string;
+};
+
+export function ModuleForm({ action, initial, submitLabel }: Props) {
+  const [state, formAction, isPending] = useActionState(action, { message: "" });
 
   return (
     <form action={formAction} className="flex flex-col gap-5">
@@ -28,6 +36,7 @@ export function NewModuleForm() {
           name="name"
           required
           maxLength={60}
+          defaultValue={initial?.name}
           placeholder="e.g. Psychology 101"
           autoComplete="off"
           className={`${FIELD} placeholder:text-ink-soft placeholder:font-semibold`}
@@ -43,7 +52,7 @@ export function NewModuleForm() {
                 type="radio"
                 name="color"
                 value={value}
-                defaultChecked={index === 0}
+                defaultChecked={initial ? initial.color === value : index === 0}
                 aria-label={label}
                 className="peer sr-only"
               />
@@ -59,7 +68,13 @@ export function NewModuleForm() {
         <label htmlFor="examDate" className="text-[15px] font-extrabold">
           Exam date <span className="text-ink-soft font-semibold">(optional)</span>
         </label>
-        <input id="examDate" name="examDate" type="date" className={FIELD} />
+        <input
+          id="examDate"
+          name="examDate"
+          type="date"
+          defaultValue={initial?.examDate}
+          className={FIELD}
+        />
       </div>
 
       {state.message && (
@@ -76,7 +91,7 @@ export function NewModuleForm() {
         disabled={isPending}
         className="border-ink bg-ink h-14.5 rounded-[18px] border-2 text-[17px] font-extrabold text-white disabled:opacity-60"
       >
-        {isPending ? "Creating…" : "Create"}
+        {isPending ? "Saving…" : submitLabel}
       </button>
     </form>
   );

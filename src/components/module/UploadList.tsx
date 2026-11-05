@@ -1,4 +1,6 @@
 import Link from "next/link";
+import { removeUpload } from "@/app/modules/actions";
+import { ConfirmDelete } from "../ConfirmDelete";
 import type { Upload, UploadKind } from "@/lib/types";
 
 const kindBadge: Record<UploadKind, { label: string; bg: string }> = {
@@ -26,7 +28,7 @@ export function UploadList({ moduleId, uploads }: { moduleId: string; uploads: U
       ) : (
         <ul className="flex flex-col gap-2.5 md:grid md:grid-cols-2">
           {uploads.map((upload) => (
-            <UploadRow key={upload.id} upload={upload} />
+            <UploadRow key={upload.id} moduleId={moduleId} upload={upload} />
           ))}
         </ul>
       )}
@@ -34,11 +36,11 @@ export function UploadList({ moduleId, uploads }: { moduleId: string; uploads: U
   );
 }
 
-function UploadRow({ upload }: { upload: Upload }) {
+function UploadRow({ moduleId, upload }: { moduleId: string; upload: Upload }) {
   const badge = kindBadge[upload.kind];
 
   return (
-    <li className="border-ink flex items-center gap-3 rounded-[18px] border-2 bg-white p-3.5">
+    <li className="border-ink flex flex-wrap items-center gap-3 rounded-[18px] border-2 bg-white p-3.5">
       <span
         className={`border-ink flex size-11 shrink-0 items-center justify-center rounded-xl border-2 text-[11px] font-extrabold ${badge.bg}`}
       >
@@ -48,6 +50,12 @@ function UploadRow({ upload }: { upload: Upload }) {
         <span className="text-base font-extrabold">{upload.name}</span>
         <UploadStatus upload={upload} />
       </span>
+      <ConfirmDelete
+        compact
+        label={`Delete ${upload.name}`}
+        question="Delete this upload and the notes, quiz and cards made from it?"
+        onDelete={removeUpload.bind(null, upload.id, moduleId)}
+      />
     </li>
   );
 }
