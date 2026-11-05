@@ -16,7 +16,7 @@ export function ModuleList({ modules }: { modules: StudyModule[] }) {
         </button>
       </div>
 
-      <ul className="flex flex-col gap-3">
+      <ul className="flex flex-col gap-3 lg:grid lg:grid-cols-2">
         {modules.map((module) => (
           <li key={module.id}>
             <Link

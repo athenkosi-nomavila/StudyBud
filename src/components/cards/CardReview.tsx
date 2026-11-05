@@ -4,6 +4,7 @@ import Link from "next/link";
 import { useState } from "react";
 import { CloseIcon } from "../icons";
 import { ProgressBar } from "../ProgressBar";
+import { ResultCard } from "../ResultCard";
 import { RATINGS, type Rating } from "@/lib/review";
 import type { Flashcard } from "@/lib/types";
 
@@ -21,12 +22,19 @@ export function CardReview({ cards, subtitle, exitHref }: Props) {
 
   const isFinished = index >= cards.length;
   const card = cards[index];
+  const missed = cards.length - gotCount;
 
   // The AI flashcards step will also save the rating and schedule the card's next review.
   function rate(rating: Rating) {
     if (rating === "got") setGotCount((count) => count + 1);
     setIsFlipped(false);
     setIndex((i) => i + 1);
+  }
+
+  function restart() {
+    setIndex(0);
+    setGotCount(0);
+    setIsFlipped(false);
   }
 
   return (
@@ -49,12 +57,18 @@ export function CardReview({ cards, subtitle, exitHref }: Props) {
         <h1 className="text-[30px] leading-none font-extrabold tracking-tight">Flashcards</h1>
         <p className="text-ink-soft pt-1.5 text-[15px] font-semibold">{subtitle}</p>
         <p className="pt-3 text-[17px] font-semibold">
-          Test your memory. Answer in your head, then flip to check.
+          Test your memory. Say or write down your answer, then flip to check if it&apos;s right.
         </p>
       </header>
 
       {isFinished ? (
-        <Results got={gotCount} total={cards.length} exitHref={exitHref} />
+        <ResultCard correct={gotCount} total={cards.length} onRetry={restart} exitHref={exitHref}>
+          <p className="text-4xl font-extrabold tracking-tight">All done</p>
+          <p className="text-lg font-extrabold">
+            You knew {gotCount} of {cards.length}
+          </p>
+          {missed > 0 && <p className="text-[15px] font-semibold">{missed} to practise again</p>}
+        </ResultCard>
       ) : (
         <>
           <div className="relative h-[400px]">
@@ -120,25 +134,5 @@ function CardLabel({ children }: { children: React.ReactNode }) {
     <span className="text-ink-soft text-[13px] font-extrabold tracking-wide uppercase">
       {children}
     </span>
-  );
-}
-
-function Results({ got, total, exitHref }: { got: number; total: number; exitHref: string }) {
-  const missed = total - got;
-
-  return (
-    <div className="border-ink bg-lime shadow-pop flex flex-col items-center gap-4 rounded-[28px] border-2 p-7 text-center">
-      <p className="text-4xl font-extrabold tracking-tight">All done</p>
-      <p className="text-lg font-extrabold">
-        You knew {got} of {total}
-      </p>
-      {missed > 0 && <p className="text-[15px] font-semibold">{missed} to practise again</p>}
-      <Link
-        href={exitHref}
-        className="border-ink bg-ink flex h-14 w-full items-center justify-center rounded-2xl border-2 text-[17px] font-extrabold text-white"
-      >
-        Back
-      </Link>
-    </div>
   );
 }

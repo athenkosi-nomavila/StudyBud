@@ -1,6 +1,7 @@
 import { BottomNav } from "@/components/BottomNav";
 import { UploadForm } from "@/components/upload/UploadForm";
 import { getModules } from "@/lib/db/modules";
+import { FOCUSED_PAGE } from "@/lib/layout";
 
 export default async function UploadPage({
   searchParams,
@@ -13,7 +14,7 @@ export default async function UploadPage({
 
   return (
     <>
-      <main className="mx-auto flex max-w-md flex-col gap-6 px-5 pt-7 pb-32">
+      <main className={`mx-auto flex flex-col gap-6 px-5 pt-7 pb-32 ${FOCUSED_PAGE}`}>
         <header>
           <h1 className="text-[30px] font-extrabold tracking-tight">Add notes</h1>
           <p className="pt-1 text-[17px] font-semibold">

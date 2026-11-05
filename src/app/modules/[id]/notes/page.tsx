@@ -3,6 +3,7 @@ import { notFound } from "next/navigation";
 import { BackLink } from "@/components/BackLink";
 import { KeyIdeaList } from "@/components/notes/KeyIdeaList";
 import { getModule } from "@/lib/db/modules";
+import { WIDE_PAGE } from "@/lib/layout";
 import { getNotes } from "@/lib/db/study";
 
 export default async function NotesPage({ params }: { params: Promise<{ id: string }> }) {
@@ -12,7 +13,7 @@ export default async function NotesPage({ params }: { params: Promise<{ id: stri
 
   return (
     <>
-      <main className="mx-auto flex max-w-md flex-col gap-5 px-5 pt-5 pb-32">
+      <main className={`mx-auto flex flex-col gap-5 px-5 pt-5 pb-32 ${WIDE_PAGE}`}>
         <div className="flex items-center gap-3">
           <BackLink href={`/modules/${id}`} />
           <span className="text-ink-soft text-[15px] font-semibold">{studyModule.name}</span>
