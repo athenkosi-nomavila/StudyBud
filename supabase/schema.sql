@@ -5,7 +5,7 @@
 create table modules (
   id text primary key default gen_random_uuid()::text,
   name text not null,
-  color text not null check (color in ('lime', 'sky', 'butter', 'coral')),
+  color text not null check (color in ('lime', 'sky', 'butter', 'coral', 'mint', 'aqua', 'periwinkle', 'lilac', 'pink', 'peach', 'sand', 'stone')),
   exam_date date,
   created_at timestamptz not null default now()
 );

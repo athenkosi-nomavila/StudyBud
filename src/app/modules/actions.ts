@@ -9,9 +9,10 @@ import {
   updateModule,
   type NewModule,
 } from "@/lib/db/modules";
+import { MODULE_COLORS } from "@/lib/colors";
 import type { ModuleColor } from "@/lib/types";
 
-const COLORS: ModuleColor[] = ["lime", "sky", "butter", "coral"];
+const COLORS = MODULE_COLORS.map((color) => color.value);
 const ISO_DATE = /^\d{4}-\d{2}-\d{2}$/;
 const MAX_NAME_LENGTH = 60;
 
