@@ -5,6 +5,7 @@ import { useState } from "react";
 import { CloseIcon } from "../icons";
 import { ProgressBar } from "../ProgressBar";
 import { ResultCard } from "../ResultCard";
+import { rateCard } from "@/app/cards/actions";
 import { RATINGS, type Rating } from "@/lib/review";
 import type { Flashcard } from "@/lib/types";
 
@@ -19,13 +20,17 @@ export function CardReview({ cards, subtitle, exitHref }: Props) {
   const [index, setIndex] = useState(0);
   const [isFlipped, setIsFlipped] = useState(false);
   const [gotCount, setGotCount] = useState(0);
+  const [saveFailed, setSaveFailed] = useState(false);
 
   const isFinished = index >= cards.length;
   const card = cards[index];
   const missed = cards.length - gotCount;
 
-  // The AI flashcards step will also save the rating and schedule the card's next review.
   function rate(rating: Rating) {
+    // Saved in the background so the next card shows straight away.
+    rateCard(card.id, rating)
+      .then((result) => setSaveFailed(!result.ok))
+      .catch(() => setSaveFailed(true));
     if (rating === "got") setGotCount((count) => count + 1);
     setIsFlipped(false);
     setIndex((i) => i + 1);
@@ -60,6 +65,12 @@ export function CardReview({ cards, subtitle, exitHref }: Props) {
           Test your memory. Say or write down your answer, then flip to check if it&apos;s right.
         </p>
       </header>
+
+      {saveFailed && (
+        <p className="border-ink bg-coral rounded-[18px] border-2 p-3 text-[15px] font-semibold">
+          Couldn&apos;t save your answer. Check your connection.
+        </p>
+      )}
 
       {isFinished ? (
         <ResultCard correct={gotCount} total={cards.length} onRetry={restart} exitHref={exitHref}>

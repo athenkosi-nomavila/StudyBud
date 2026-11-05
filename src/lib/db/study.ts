@@ -1,4 +1,5 @@
 import "server-only";
+import { dueDate, nextInterval, type Rating } from "../review";
 import type { Flashcard, KeyIdea, QuizQuestion, StudyNotes } from "../types";
 import { db } from "./client";
 
@@ -74,4 +75,21 @@ export async function getDueCards(): Promise<Flashcard[]> {
     .order("due_at");
   if (error) throw error;
   return data.map(toCard);
+}
+
+/** Moves a card to its next review date after she rates it. */
+export async function scheduleCard(cardId: string, rating: Rating): Promise<void> {
+  const { data, error } = await db
+    .from("flashcards")
+    .select("interval_days")
+    .eq("id", cardId)
+    .single();
+  if (error) throw error;
+
+  const intervalDays = nextInterval(data.interval_days, rating);
+  const { error: updateError } = await db
+    .from("flashcards")
+    .update({ interval_days: intervalDays, due_at: dueDate(intervalDays).toISOString() })
+    .eq("id", cardId);
+  if (updateError) throw updateError;
 }

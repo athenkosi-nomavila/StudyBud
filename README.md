@@ -21,8 +21,9 @@ The SQL files live in `supabase/`. Run them in the Supabase dashboard under **SQ
 2. `storage.sql` adds the private file bucket for uploads. Run it once.
 3. `upload-text.sql` adds the text pulled out of each upload. Run it once.
 4. `quiz-uploads.sql` and `study-uploads.sql` link notes, quiz questions and flashcards to their upload. Run them once.
-5. `seed.sql` is optional and loads the sample content for testing.
-6. `clear-sample.sql` removes the sample content. Run it before real use.
+5. `card-schedule.sql` stores each flashcard's gap between reviews. Run it once.
+6. `seed.sql` is optional and loads the sample content for testing.
+7. `clear-sample.sql` removes the sample content. Run it before real use.
 
 The app reads the database from the server only, using two environment variables. Never commit them:
 
