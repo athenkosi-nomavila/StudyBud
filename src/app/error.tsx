@@ -23,6 +23,7 @@ export default function ErrorPage({ error, reset }: { error: Error; reset: () =>
   return (
     <StatusScreen
       title="Something went wrong"
+      color="bg-coral"
       message="This page didn't load. Check your connection and try again."
       action={
         <button

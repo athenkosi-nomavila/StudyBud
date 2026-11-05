@@ -98,7 +98,10 @@ export function UploadForm({ modules, defaultModuleId }: Props) {
       )}
 
       {error && (
-        <p role="alert" className="text-[15px] font-extrabold">
+        <p
+          role="alert"
+          className="border-ink bg-coral rounded-2xl border-2 px-4 py-3 text-[15px] font-extrabold"
+        >
           {error}
         </p>
       )}
