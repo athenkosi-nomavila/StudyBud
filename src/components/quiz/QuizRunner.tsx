@@ -69,7 +69,8 @@ export function QuizRunner({ questions: initialQuestions, subtitle, exitHref }: 
         <h1 className="text-[30px] leading-none font-extrabold tracking-tight">Quiz</h1>
         <p className="text-ink-soft pt-1.5 text-[15px] font-semibold">{subtitle}</p>
         <p className="pt-3 text-[17px] font-semibold">
-          Pick an answer. You&apos;ll see why after each one.
+          Pick an answer to find out if itPick an answer. You&apos;ll see why after each one.apos;s
+          correct.
         </p>
       </header>
 
