@@ -6,10 +6,8 @@ import { getModuleCards } from "@/lib/db/study";
 
 export default async function ModuleCardsPage({ params }: { params: Promise<{ id: string }> }) {
   const { id } = await params;
-  const studyModule = await getModule(id);
+  const [studyModule, cards] = await Promise.all([getModule(id), getModuleCards(id)]);
   if (!studyModule) notFound();
-
-  const cards = await getModuleCards(id);
 
   return (
     <main className="mx-auto flex max-w-md flex-col gap-5 px-5 pt-5 pb-10">

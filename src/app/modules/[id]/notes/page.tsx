@@ -7,10 +7,8 @@ import { getNotes } from "@/lib/db/study";
 
 export default async function NotesPage({ params }: { params: Promise<{ id: string }> }) {
   const { id } = await params;
-  const studyModule = await getModule(id);
+  const [studyModule, notes] = await Promise.all([getModule(id), getNotes(id)]);
   if (!studyModule) notFound();
-
-  const notes = await getNotes(id);
 
   return (
     <>

@@ -22,3 +22,25 @@ body {
   color: var(--color-ink);
   font-family: var(--font-bricolage), system-ui, sans-serif;
 }
+
+/*
+ * Pressed look: links and buttons sink when tapped, and Pop blocks drop onto their shadow.
+ * Kept outside Tailwind's layers so it wins over the shadow utilities.
+ */
+:is(a, button) {
+  -webkit-tap-highlight-color: transparent;
+  transition:
+    translate 80ms ease-out,
+    box-shadow 80ms ease-out;
+}
+:is(a, button):not(:disabled):active {
+  translate: 2px 2px;
+}
+:is(a, button):is(.shadow-pop-sm):not(:disabled):active {
+  translate: 4px 4px;
+  box-shadow: none;
+}
+:is(a, button):is(.shadow-pop):not(:disabled):active {
+  translate: 5px 5px;
+  box-shadow: none;
+}
