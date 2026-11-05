@@ -15,3 +15,29 @@ export function examCountdownLabel(isoDate: string): string {
   if (days === 1) return "Exam tomorrow";
   return `Exam in ${days} days`;
 }
+
+// South African time is UTC+2 all year, with no daylight saving.
+const SAST_OFFSET_MS = 2 * 60 * 60 * 1000;
+
+/** Midnight in South Africa, `days` days after the day of `now`. */
+export function sastMidnight(days: number, now = new Date()): Date {
+  const local = now.getTime() + SAST_OFFSET_MS;
+  const localMidnight = local - (local % MS_PER_DAY);
+  return new Date(localMidnight + days * MS_PER_DAY - SAST_OFFSET_MS);
+}
+
+/** The South African date as "YYYY-MM-DD", `days` days after the day of `now`. */
+export function sastDay(days = 0, now = new Date()): string {
+  return new Date(sastMidnight(days, now).getTime() + SAST_OFFSET_MS).toISOString().slice(0, 10);
+}
+
+/** Days in a row with study, counting back from today (or yesterday, if not yet today). */
+export function streakFrom(studyDays: Set<string>, now = new Date()): number {
+  let offset = studyDays.has(sastDay(0, now)) ? 0 : -1;
+  let streak = 0;
+  while (studyDays.has(sastDay(offset, now))) {
+    streak++;
+    offset--;
+  }
+  return streak;
+}

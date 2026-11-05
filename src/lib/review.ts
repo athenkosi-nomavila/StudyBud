@@ -1,3 +1,5 @@
+import { sastMidnight } from "./dates";
+
 // Whether she remembered a card, and when it comes back: missed cards
 // tomorrow, known cards after a gap that grows each time.
 export type Rating = "missed" | "got";
@@ -16,13 +18,7 @@ export function nextInterval(currentDays: number, rating: Rating): number {
   return INTERVALS.find((days) => days > currentDays) ?? INTERVALS[INTERVALS.length - 1];
 }
 
-// South Africa is UTC+2 all year, so midnight there is 22:00 UTC the day before.
-const SAST_OFFSET_MS = 2 * 60 * 60 * 1000;
-const DAY_MS = 24 * 60 * 60 * 1000;
-
-/** Midnight in South Africa, `days` days after the day of `now`. */
+/** When a card with this gap comes back: midnight South African time, that many days on. */
 export function dueDate(days: number, now = new Date()): Date {
-  const local = now.getTime() + SAST_OFFSET_MS;
-  const localMidnight = local - (local % DAY_MS);
-  return new Date(localMidnight + days * DAY_MS - SAST_OFFSET_MS);
+  return sastMidnight(days, now);
 }

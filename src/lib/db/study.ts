@@ -2,6 +2,7 @@ import "server-only";
 import { dueDate, nextInterval, type Rating } from "../review";
 import type { Flashcard, KeyIdea, QuizQuestion, StudyNotes } from "../types";
 import { db } from "./client";
+import { logStudy } from "./history";
 
 // The study content for a module: notes, quiz questions and flashcards.
 
@@ -81,7 +82,7 @@ export async function getDueCards(): Promise<Flashcard[]> {
 export async function scheduleCard(cardId: string, rating: Rating): Promise<void> {
   const { data, error } = await db
     .from("flashcards")
-    .select("interval_days")
+    .select("interval_days, module_id")
     .eq("id", cardId)
     .single();
   if (error) throw error;
@@ -92,4 +93,6 @@ export async function scheduleCard(cardId: string, rating: Rating): Promise<void
     .update({ interval_days: intervalDays, due_at: dueDate(intervalDays).toISOString() })
     .eq("id", cardId);
   if (updateError) throw updateError;
+
+  await logStudy(data.module_id, "card", rating === "got" ? 1 : 0, 1);
 }
