@@ -11,12 +11,19 @@ export function TodayReviewCard({ cardsDue }: { cardsDue: number }) {
     <section>
       <h2 className="pb-3 text-xl font-extrabold">Flashcards</h2>
       <div className="border-ink bg-coral shadow-pop flex flex-col gap-1.5 rounded-[28px] border-2 p-6">
-        <p className="text-[52px] leading-none font-extrabold tracking-tight">
-          {hasCards ? `${cardsDue} ${cardsDue === 1 ? "card" : "cards"} due` : "All caught up"}
-        </p>
+        {hasCards ? (
+          <p className="flex flex-col gap-1 font-extrabold tracking-tight">
+            <span className="text-[52px] leading-none">
+              {cardsDue} {cardsDue === 1 ? "card" : "cards"}
+            </span>
+            <span className="text-2xl leading-none">due today</span>
+          </p>
+        ) : (
+          <p className="text-[40px] leading-none font-extrabold tracking-tight">All caught up</p>
+        )}
         {hasCards && (
           <>
-            <p className="text-[15px] font-semibold">
+            <p className="pt-1 text-[15px] font-semibold">
               ≈ {minutes} {minutes === 1 ? "minute" : "minutes"}
             </p>
             <Link
