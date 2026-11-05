@@ -123,3 +123,11 @@ export function CheckIcon(props: IconProps) {
     </Svg>
   );
 }
+
+export function ChartIcon(props: IconProps) {
+  return (
+    <Svg {...props}>
+      <path d="M4 20V10M10 20V4M16 20v-7M22 20H2" />
+    </Svg>
+  );
+}
