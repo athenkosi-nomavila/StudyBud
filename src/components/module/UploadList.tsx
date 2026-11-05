@@ -36,7 +36,6 @@ export function UploadList({ moduleId, uploads }: { moduleId: string; uploads: U
 
 function UploadRow({ upload }: { upload: Upload }) {
   const badge = kindBadge[upload.kind];
-  const isProcessing = upload.status === "processing";
 
   return (
     <li className="border-ink flex items-center gap-3 rounded-[18px] border-2 bg-white p-3.5">
@@ -47,22 +46,38 @@ function UploadRow({ upload }: { upload: Upload }) {
       </span>
       <span className="flex flex-1 flex-col gap-1">
         <span className="text-base font-extrabold">{upload.name}</span>
-        {isProcessing ? (
-          <span
-            className="border-ink h-2.5 overflow-hidden rounded-full border-2 bg-white"
-            role="progressbar"
-            aria-label="Processing"
-          >
-            <span className="bg-lime block h-full w-1/2 animate-pulse" />
-          </span>
-        ) : upload.status === "failed" ? (
-          <span className="border-ink bg-coral self-start rounded-lg border-2 px-2 py-0.5 text-[13px] font-extrabold">
-            Couldn&apos;t read this. Try a PDF, .docx or .pptx.
-          </span>
-        ) : (
-          <span className="text-ink-soft text-[13px] font-semibold">Ready</span>
-        )}
+        <UploadStatus upload={upload} />
       </span>
     </li>
+  );
+}
+
+function UploadStatus({ upload }: { upload: Upload }) {
+  if (upload.hasStudy) {
+    return <span className="text-ink-soft text-[13px] font-semibold">Ready</span>;
+  }
+  // Photos wait to be read along with the notes, quiz and cards.
+  if (upload.status === "ready" || upload.kind === "photo") {
+    return (
+      <span className="text-ink-soft text-[13px] font-semibold">
+        Notes, quiz and cards coming soon
+      </span>
+    );
+  }
+  if (upload.status === "failed") {
+    return (
+      <span className="border-ink bg-coral self-start rounded-lg border-2 px-2 py-0.5 text-[13px] font-extrabold">
+        Couldn&apos;t read this. Try a PDF, .docx or .pptx.
+      </span>
+    );
+  }
+  return (
+    <span
+      className="border-ink h-2.5 overflow-hidden rounded-full border-2 bg-white"
+      role="progressbar"
+      aria-label="Processing"
+    >
+      <span className="bg-lime block h-full w-1/2 animate-pulse" />
+    </span>
   );
 }
