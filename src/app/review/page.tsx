@@ -11,7 +11,7 @@ export default async function ReviewPage() {
   return (
     <main className="mx-auto flex max-w-md flex-col gap-5 px-5 pt-5 pb-10">
       {cards.length > 0 ? (
-        <CardReview cards={cards} exitHref="/" />
+        <CardReview cards={cards} subtitle="Due today" exitHref="/" />
       ) : (
         <>
           <BackLink href="/" />

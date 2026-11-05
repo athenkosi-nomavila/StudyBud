@@ -6,14 +6,15 @@ import { getModuleCards } from "@/lib/db/study";
 
 export default async function ModuleCardsPage({ params }: { params: Promise<{ id: string }> }) {
   const { id } = await params;
-  if (!(await getModule(id))) notFound();
+  const studyModule = await getModule(id);
+  if (!studyModule) notFound();
 
   const cards = await getModuleCards(id);
 
   return (
     <main className="mx-auto flex max-w-md flex-col gap-5 px-5 pt-5 pb-10">
       {cards.length > 0 ? (
-        <CardReview cards={cards} exitHref={`/modules/${id}`} />
+        <CardReview cards={cards} subtitle={studyModule.name} exitHref={`/modules/${id}`} />
       ) : (
         <>
           <BackLink href={`/modules/${id}`} />
