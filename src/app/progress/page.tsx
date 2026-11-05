@@ -1,5 +1,6 @@
+import Link from "next/link";
 import { BottomNav } from "@/components/BottomNav";
-import { FlameIcon } from "@/components/icons";
+import { ArrowRightIcon, FlameIcon } from "@/components/icons";
 import { getProgress } from "@/lib/db/history";
 import { moduleBgClass, scoreBgClass } from "@/lib/colors";
 import { WIDE_PAGE } from "@/lib/layout";
@@ -11,17 +12,13 @@ const WEEKDAY = new Intl.DateTimeFormat("en-ZA", { weekday: "narrow", timeZone: 
 export default async function ProgressPage() {
   const progress = await getProgress();
   const { memory, cardsThisWeek } = progress;
-  const cardsTotal = memory.lockedIn + memory.gettingThere + memory.stillLearning;
   const memoryGroups = [
     { label: "Locked in", hint: "a week or more", count: memory.lockedIn, color: "bg-lime" },
     { label: "Getting there", hint: "1 to 3 days", count: memory.gettingThere, color: "bg-butter" },
-    {
-      label: "Still learning",
-      hint: "new or missed",
-      count: memory.stillLearning,
-      color: "bg-white",
-    },
+    { label: "Missed", hint: "back tomorrow", count: memory.missed, color: "bg-coral" },
+    { label: "New", hint: "not tried yet", count: memory.new, color: "bg-white" },
   ];
+  const cardsTotal = memoryGroups.reduce((sum, { count }) => sum + count, 0);
 
   return (
     <>
@@ -57,7 +54,10 @@ export default async function ProgressPage() {
             </ol>
           </section>
 
-          <section className="border-ink bg-sky shadow-pop flex flex-col gap-4 rounded-[28px] border-2 p-6">
+          <Link
+            href="/progress/cards"
+            className="border-ink bg-sky shadow-pop flex flex-col gap-4 rounded-[28px] border-2 p-6"
+          >
             <h2 className="text-xl font-extrabold">How well you remember</h2>
             <div
               className="border-ink flex h-5 overflow-hidden rounded-full border-2 bg-white"
@@ -86,12 +86,15 @@ export default async function ProgressPage() {
                 </li>
               ))}
             </ul>
-            <p className="border-ink border-t-2 border-dashed pt-3 text-[15px] font-semibold">
-              {cardsThisWeek.practised === 0
-                ? "No cards practised this week yet."
-                : `This week: ${cardsThisWeek.practised} ${cardsThisWeek.practised === 1 ? "card" : "cards"} practised, ${cardsThisWeek.remembered} remembered.`}
+            <p className="border-ink flex items-center gap-2 border-t-2 border-dashed pt-3 text-[15px] font-semibold">
+              <span className="flex-1">
+                {cardsThisWeek.practised === 0
+                  ? "No cards practised this week yet."
+                  : `This week: ${cardsThisWeek.remembered} of ${cardsThisWeek.practised} ${cardsThisWeek.practised === 1 ? "card" : "cards"} remembered.`}
+              </span>
+              <ArrowRightIcon size={18} />
             </p>
-          </section>
+          </Link>
         </div>
 
         <section className="flex flex-col gap-3">
@@ -101,24 +104,29 @@ export default async function ProgressPage() {
           ) : (
             <ul className="flex flex-col gap-3 md:grid md:grid-cols-2">
               {progress.quizzes.map((quiz) => (
-                <li
-                  key={quiz.moduleId}
-                  className="border-ink flex items-center gap-4 rounded-[22px] border-2 bg-white p-4"
-                >
-                  <span
-                    className={`border-ink size-4 shrink-0 rounded-full border-2 ${moduleBgClass[quiz.color]}`}
-                  />
-                  <span className="flex flex-1 flex-col">
-                    <span className="text-lg leading-tight font-extrabold">{quiz.moduleName}</span>
-                    <span className="text-ink-soft text-[13px] font-semibold">
-                      {trendLabel(quiz.correct / quiz.total, quiz.previousRatio)}
-                    </span>
-                  </span>
-                  <span
-                    className={`border-ink rounded-full border-2 px-3 py-1 text-[15px] font-extrabold ${scoreBgClass(quiz.correct, quiz.total)}`}
+                <li key={quiz.moduleId}>
+                  <Link
+                    href={`/progress/quiz/${quiz.moduleId}`}
+                    className="border-ink flex items-center gap-4 rounded-[22px] border-2 bg-white p-4"
                   >
-                    {quiz.correct}/{quiz.total}
-                  </span>
+                    <span
+                      className={`border-ink size-4 shrink-0 rounded-full border-2 ${moduleBgClass[quiz.color]}`}
+                    />
+                    <span className="flex flex-1 flex-col">
+                      <span className="text-lg leading-tight font-extrabold">
+                        {quiz.moduleName}
+                      </span>
+                      <span className="text-ink-soft text-[13px] font-semibold">
+                        {trendLabel(quiz.correct / quiz.total, quiz.previousRatio)}
+                      </span>
+                    </span>
+                    <span
+                      className={`border-ink rounded-full border-2 px-3 py-1 text-[15px] font-extrabold ${scoreBgClass(quiz.correct, quiz.total)}`}
+                    >
+                      {quiz.correct}/{quiz.total}
+                    </span>
+                    <ArrowRightIcon size={18} />
+                  </Link>
                 </li>
               ))}
             </ul>

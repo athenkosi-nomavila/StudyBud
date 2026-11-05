@@ -6,7 +6,7 @@ import { CloseIcon } from "../icons";
 import { ProgressBar } from "../ProgressBar";
 import { ResultCard } from "../ResultCard";
 import { AnswerOption, type AnswerState } from "./AnswerOption";
-import { saveQuizResult } from "@/app/quiz/actions";
+import { saveQuizResult, type QuizPick } from "@/app/quiz/actions";
 import { shuffleQuiz } from "@/lib/quiz";
 import type { QuizQuestion } from "@/lib/types";
 
@@ -22,6 +22,7 @@ export function QuizRunner({ questions: initialQuestions, subtitle, exitHref }: 
   const [index, setIndex] = useState(0);
   const [picked, setPicked] = useState<number | null>(null);
   const [score, setScore] = useState(0);
+  const [picks, setPicks] = useState<QuizPick[]>([]);
 
   const isFinished = index >= questions.length;
   const question = questions[index];
@@ -30,12 +31,13 @@ export function QuizRunner({ questions: initialQuestions, subtitle, exitHref }: 
   function pick(optionIndex: number) {
     setPicked(optionIndex);
     if (optionIndex === question.answerIndex) setScore((s) => s + 1);
+    setPicks((p) => [...p, { questionId: question.id, picked: question.options[optionIndex] }]);
   }
 
   function next() {
-    // Finishing the quiz: save her score in the background for her progress.
+    // Finishing the quiz: save her answers in the background for her progress.
     if (index === questions.length - 1) {
-      saveQuizResult(question.moduleId, score, questions.length).catch(() => {});
+      saveQuizResult(question.moduleId, picks).catch(() => {});
     }
     setPicked(null);
     setIndex((i) => i + 1);
@@ -46,6 +48,7 @@ export function QuizRunner({ questions: initialQuestions, subtitle, exitHref }: 
     setIndex(0);
     setPicked(null);
     setScore(0);
+    setPicks([]);
   }
 
   function optionState(optionIndex: number): AnswerState {

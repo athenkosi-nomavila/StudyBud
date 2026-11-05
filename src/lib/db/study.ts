@@ -82,7 +82,7 @@ export async function getDueCards(): Promise<Flashcard[]> {
 export async function scheduleCard(cardId: string, rating: Rating): Promise<void> {
   const { data, error } = await db
     .from("flashcards")
-    .select("interval_days, module_id")
+    .select("interval_days, module_id, front, back")
     .eq("id", cardId)
     .single();
   if (error) throw error;
@@ -92,9 +92,16 @@ export async function scheduleCard(cardId: string, rating: Rating): Promise<void
   const intervalDays = rating === "missed" ? 0 : gapDays;
   const { error: updateError } = await db
     .from("flashcards")
-    .update({ interval_days: intervalDays, due_at: dueDate(gapDays).toISOString() })
+    .update({
+      interval_days: intervalDays,
+      due_at: dueDate(gapDays).toISOString(),
+      last_rated_at: new Date().toISOString(),
+    })
     .eq("id", cardId);
   if (updateError) throw updateError;
 
-  await logStudy(data.module_id, "card", rating === "got" ? 1 : 0, 1);
+  await logStudy(data.module_id, "card", rating === "got" ? 1 : 0, 1, {
+    front: data.front,
+    back: data.back,
+  });
 }

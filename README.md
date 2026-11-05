@@ -24,8 +24,9 @@ The SQL files live in `supabase/`. Run them in the Supabase dashboard under **SQ
 5. `card-schedule.sql` stores each flashcard's gap between reviews. Run it once.
 6. `study-log.sql` saves her study history (finished quizzes and card ratings), with a little sample history. Run it once.
 7. `module-colours.sql` allows the 8 extra module colours. Run it once.
-8. `seed.sql` is optional and loads the sample content for testing.
-9. `clear-sample.sql` removes the sample content. Run it before real use.
+8. `study-details.sql` saves her quiz answers and card ratings in more detail, for Progress. Run it once.
+9. `seed.sql` is optional and loads the sample content for testing.
+10. `clear-sample.sql` removes the sample content. Run it before real use.
 
 The app reads the database from the server only, using two environment variables. Never commit them:
 
