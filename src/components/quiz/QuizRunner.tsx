@@ -4,6 +4,7 @@ import Link from "next/link";
 import { useState } from "react";
 import { CloseIcon } from "../icons";
 import { ProgressBar } from "../ProgressBar";
+import { ResultCard } from "../ResultCard";
 import { AnswerOption, type AnswerState } from "./AnswerOption";
 import { shuffleQuiz } from "@/lib/quiz";
 import type { QuizQuestion } from "@/lib/types";
@@ -74,19 +75,12 @@ export function QuizRunner({ questions: initialQuestions, subtitle, exitHref }: 
       </header>
 
       {isFinished ? (
-        <div className="border-ink bg-butter shadow-pop flex flex-col items-center gap-4 rounded-[28px] border-2 p-7 text-center">
+        <ResultCard correct={score} total={questions.length} onRetry={restart} exitHref={exitHref}>
           <p className="text-[15px] font-semibold">Your score</p>
           <p className="text-6xl font-extrabold tracking-tight">
             {score}/{questions.length}
           </p>
-          <button
-            type="button"
-            onClick={restart}
-            className="border-ink bg-ink h-14 w-full rounded-2xl border-2 text-[17px] font-extrabold text-white"
-          >
-            Try again
-          </button>
-        </div>
+        </ResultCard>
       ) : (
         <>
           <h2 className="text-[26px] leading-tight font-extrabold tracking-tight">
