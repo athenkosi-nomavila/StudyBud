@@ -1,3 +1,4 @@
+import Link from "next/link";
 import { BottomNav } from "@/components/BottomNav";
 import { UploadForm } from "@/components/upload/UploadForm";
 import { getModules } from "@/lib/db/modules";
@@ -21,7 +22,16 @@ export default async function UploadPage({
             Upload lecture notes or slides to study from.
           </p>
         </header>
-        <UploadForm modules={modules} defaultModuleId={defaultModuleId} />
+        {modules.length > 0 ? (
+          <UploadForm modules={modules} defaultModuleId={defaultModuleId} />
+        ) : (
+          <Link
+            href="/modules/new"
+            className="border-ink bg-lime shadow-pop flex h-14.5 items-center justify-center rounded-[18px] border-2 text-[17px] font-extrabold"
+          >
+            Add a module first
+          </Link>
+        )}
       </main>
       <BottomNav />
     </>
