@@ -4,6 +4,7 @@ import { QuizRunner } from "@/components/quiz/QuizRunner";
 import { shuffleQuiz } from "@/lib/quiz";
 import { getModule } from "@/lib/db/modules";
 import { getQuiz } from "@/lib/db/study";
+import { FOCUSED_PAGE } from "@/lib/layout";
 
 export default async function QuizPage({ params }: { params: Promise<{ id: string }> }) {
   const { id } = await params;
@@ -14,7 +15,7 @@ export default async function QuizPage({ params }: { params: Promise<{ id: strin
   const questions = shuffleQuiz(quiz);
 
   return (
-    <main className="mx-auto flex max-w-md flex-col gap-5 px-5 pt-5 pb-10">
+    <main className={`mx-auto flex flex-col gap-5 px-5 pt-5 pb-10 ${FOCUSED_PAGE}`}>
       {questions.length > 0 ? (
         <QuizRunner questions={questions} subtitle={studyModule.name} exitHref={`/modules/${id}`} />
       ) : (

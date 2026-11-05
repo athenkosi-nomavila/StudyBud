@@ -93,7 +93,7 @@ export function QuizRunner({ questions: initialQuestions, subtitle, exitHref }: 
             {question.question}
           </h2>
 
-          <div className="flex flex-col gap-2.5">
+          <div className="flex flex-col gap-2.5 md:grid md:grid-cols-2">
             {question.options.map((option, optionIndex) => (
               <AnswerOption
                 key={option}

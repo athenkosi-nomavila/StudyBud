@@ -24,7 +24,7 @@ export function UploadList({ moduleId, uploads }: { moduleId: string; uploads: U
       {uploads.length === 0 ? (
         <p className="text-ink-soft text-[15px] font-semibold">No notes yet.</p>
       ) : (
-        <ul className="flex flex-col gap-2.5">
+        <ul className="flex flex-col gap-2.5 md:grid md:grid-cols-2">
           {uploads.map((upload) => (
             <UploadRow key={upload.id} upload={upload} />
           ))}

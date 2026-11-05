@@ -5,7 +5,7 @@ const BADGE_COLORS = ["bg-lime", "bg-sky", "bg-coral", "bg-butter"];
 
 export function KeyIdeaList({ ideas }: { ideas: KeyIdea[] }) {
   return (
-    <ol className="flex flex-col gap-3">
+    <ol className="flex flex-col gap-3 md:grid md:grid-cols-2">
       {ideas.map((idea, index) => (
         <li
           key={idea.heading}
