@@ -1,5 +1,6 @@
 import { BackLink } from "@/components/BackLink";
-import { NewModuleForm } from "@/components/module/NewModuleForm";
+import { addModule } from "@/app/modules/actions";
+import { ModuleForm } from "@/components/module/ModuleForm";
 import { FOCUSED_PAGE } from "@/lib/layout";
 
 export default function NewModulePage() {
@@ -12,7 +13,7 @@ export default function NewModulePage() {
           One for each subject you&apos;re studying.
         </p>
       </header>
-      <NewModuleForm />
+      <ModuleForm action={addModule} submitLabel="Create" />
     </main>
   );
 }

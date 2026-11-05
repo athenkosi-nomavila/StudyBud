@@ -1,5 +1,6 @@
 import "server-only";
 import type { ModuleColor, StudyModule, Upload } from "../types";
+import { UPLOAD_BUCKET } from "../uploads";
 import { db } from "./client";
 
 type ModuleRow = {
@@ -95,4 +96,40 @@ export async function createModule(module: NewModule): Promise<string> {
     .single();
   if (error) throw error;
   return data.id;
+}
+
+export async function updateModule(id: string, module: NewModule): Promise<void> {
+  const { error } = await db
+    .from("modules")
+    .update({ name: module.name, color: module.color, exam_date: module.examDate })
+    .eq("id", id);
+  if (error) throw error;
+}
+
+/** Removes uploaded files from storage. */
+async function removeFiles(filePaths: (string | null)[]): Promise<void> {
+  const paths = filePaths.filter((path): path is string => Boolean(path));
+  if (paths.length === 0) return;
+  const { error } = await db.storage.from(UPLOAD_BUCKET).remove(paths);
+  if (error) throw error;
+}
+
+/** Deletes a module, its files, and (through the database) its uploads, notes, quizzes and cards. */
+export async function deleteModule(id: string): Promise<void> {
+  const { data, error } = await db.from("uploads").select("file_path").eq("module_id", id);
+  if (error) throw error;
+  await removeFiles(data.map((row) => row.file_path));
+
+  const { error: deleteError } = await db.from("modules").delete().eq("id", id);
+  if (deleteError) throw deleteError;
+}
+
+/** Deletes an upload, its file, and (through the database) the notes, quiz and cards made from it. */
+export async function deleteUpload(id: string): Promise<void> {
+  const { data, error } = await db.from("uploads").select("file_path").eq("id", id).single();
+  if (error) throw error;
+  await removeFiles([data.file_path]);
+
+  const { error: deleteError } = await db.from("uploads").delete().eq("id", id);
+  if (deleteError) throw deleteError;
 }
