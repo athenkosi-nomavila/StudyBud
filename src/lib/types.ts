@@ -15,7 +15,7 @@ export type Upload = {
   moduleId: string;
   name: string;
   kind: UploadKind;
-  status: "processing" | "ready";
+  status: "processing" | "ready" | "failed";
 };
 
 export type KeyIdea = {

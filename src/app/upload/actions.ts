@@ -1,6 +1,7 @@
 "use server";
 
 import { db } from "@/lib/db/client";
+import { extractUploadText } from "@/lib/db/extract-text";
 import { getModule } from "@/lib/db/modules";
 import {
   fileExtension,
@@ -40,7 +41,10 @@ export async function createUploadTarget(file: FileInfo): Promise<UploadTarget> 
   return { ok: true, uploadId, path, signedUrl: data.signedUrl };
 }
 
-/** Step 2: after the browser has uploaded the file, saves it as a new upload. */
+/**
+ * Step 2: after the browser has uploaded the file, saves it as a new upload
+ * and pulls its text out. Photos wait for the AI step to be read.
+ */
 export async function saveUpload(
   file: FileInfo & { uploadId: string; path: string },
 ): Promise<{ ok: boolean }> {
@@ -57,5 +61,8 @@ export async function saveUpload(
     status: "processing",
     file_path: file.path,
   });
-  return { ok: !error };
+  if (error) return { ok: false };
+
+  if (kind !== "photo") await extractUploadText(file.uploadId, file.path);
+  return { ok: true };
 }
