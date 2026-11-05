@@ -7,11 +7,11 @@ import { getQuiz } from "@/lib/db/study";
 
 export default async function QuizPage({ params }: { params: Promise<{ id: string }> }) {
   const { id } = await params;
-  const studyModule = await getModule(id);
+  const [studyModule, quiz] = await Promise.all([getModule(id), getQuiz(id)]);
   if (!studyModule) notFound();
 
   // Shuffled per visit so she can't just remember answer positions.
-  const questions = shuffleQuiz(await getQuiz(id));
+  const questions = shuffleQuiz(quiz);
 
   return (
     <main className="mx-auto flex max-w-md flex-col gap-5 px-5 pt-5 pb-10">

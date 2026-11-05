@@ -6,9 +6,8 @@ import { getModule, getUploads } from "@/lib/db/modules";
 
 export default async function ModulePage({ params }: { params: Promise<{ id: string }> }) {
   const { id } = await params;
-  const studyModule = await getModule(id);
+  const [studyModule, uploads] = await Promise.all([getModule(id), getUploads(id)]);
   if (!studyModule) notFound();
-  const uploads = await getUploads(id);
 
   return (
     <main className="mx-auto max-w-md pb-10">
