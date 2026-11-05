@@ -10,8 +10,18 @@ const WEEKDAY = new Intl.DateTimeFormat("en-ZA", { weekday: "narrow", timeZone: 
 
 export default async function ProgressPage() {
   const progress = await getProgress();
-  const learnedPercent =
-    progress.cardsTotal > 0 ? Math.round((progress.cardsLearned / progress.cardsTotal) * 100) : 0;
+  const { memory, cardsThisWeek } = progress;
+  const cardsTotal = memory.lockedIn + memory.gettingThere + memory.stillLearning;
+  const memoryGroups = [
+    { label: "Locked in", hint: "a week or more", count: memory.lockedIn, color: "bg-lime" },
+    { label: "Getting there", hint: "1 to 3 days", count: memory.gettingThere, color: "bg-butter" },
+    {
+      label: "Still learning",
+      hint: "new or missed",
+      count: memory.stillLearning,
+      color: "bg-white",
+    },
+  ];
 
   return (
     <>
@@ -47,17 +57,39 @@ export default async function ProgressPage() {
             </ol>
           </section>
 
-          <section className="border-ink bg-sky shadow-pop flex flex-col gap-3 rounded-[28px] border-2 p-6">
-            <h2 className="text-xl font-extrabold">Cards learned</h2>
-            <p className="font-extrabold tracking-tight">
-              <span className="text-[52px] leading-none">{progress.cardsLearned}</span>
-              <span className="text-2xl"> of {progress.cardsTotal}</span>
-            </p>
-            <div className="border-ink h-4 overflow-hidden rounded-full border-2 bg-white">
-              <div className="bg-ink h-full" style={{ width: `${learnedPercent}%` }} />
+          <section className="border-ink bg-sky shadow-pop flex flex-col gap-4 rounded-[28px] border-2 p-6">
+            <h2 className="text-xl font-extrabold">How well you remember</h2>
+            <div
+              className="border-ink flex h-5 overflow-hidden rounded-full border-2 bg-white"
+              aria-hidden="true"
+            >
+              {cardsTotal > 0 &&
+                memoryGroups.map(({ label, count, color }) => (
+                  <div
+                    key={label}
+                    className={`border-ink h-full not-last:border-r-2 ${color}`}
+                    style={{
+                      width: `${(count / cardsTotal) * 100}%`,
+                      display: count ? undefined : "none",
+                    }}
+                  />
+                ))}
             </div>
-            <p className="text-[15px] font-semibold">
-              A card counts as learned once you know it well enough to wait a week.
+            <ul className="flex flex-col gap-2">
+              {memoryGroups.map(({ label, hint, count, color }) => (
+                <li key={label} className="flex items-center gap-3">
+                  <span className={`border-ink size-4 shrink-0 rounded-full border-2 ${color}`} />
+                  <span className="flex-1 text-[15px] font-extrabold">
+                    {label} <span className="font-semibold">· {hint}</span>
+                  </span>
+                  <span className="text-lg font-extrabold">{count}</span>
+                </li>
+              ))}
+            </ul>
+            <p className="border-ink border-t-2 border-dashed pt-3 text-[15px] font-semibold">
+              {cardsThisWeek.practised === 0
+                ? "No cards practised this week yet."
+                : `This week: ${cardsThisWeek.practised} ${cardsThisWeek.practised === 1 ? "card" : "cards"} practised, ${cardsThisWeek.remembered} remembered.`}
             </p>
           </section>
         </div>

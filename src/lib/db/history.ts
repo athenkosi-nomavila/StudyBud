@@ -1,5 +1,5 @@
 import "server-only";
-import { sastDay, streakFrom } from "../dates";
+import { sastDay, sastMidnight, streakFrom } from "../dates";
 import type { ModuleColor } from "../types";
 import { db } from "./client";
 
@@ -46,23 +46,25 @@ export type Progress = {
   streak: number;
   /** The last 7 days, oldest first, and whether she studied on each. */
   week: { day: string; studied: boolean }[];
-  /** Cards she has got right enough times to be on a week-long gap or more. */
-  cardsLearned: number;
-  cardsTotal: number;
+  /** Her cards grouped by how long she has remembered them. */
+  memory: { lockedIn: number; gettingThere: number; stillLearning: number };
+  /** Card ratings in the last 7 days, and how many were "Got it". */
+  cardsThisWeek: { practised: number; remembered: number };
   quizzes: QuizScore[];
 };
 
-/** Cards count as learned once their gap between reviews is a week or more. */
-const LEARNED_AFTER_DAYS = 7;
+/** A card is "locked in" once its gap between reviews is a week or more. */
+const LOCKED_IN_DAYS = 7;
 
 export async function getProgress(): Promise<Progress> {
-  const [studyDays, cards, learned, quizzes] = await Promise.all([
+  const [studyDays, cards, cardRatings, quizzes] = await Promise.all([
     getStudyDays(),
-    db.from("flashcards").select("id", { count: "exact", head: true }),
+    db.from("flashcards").select("interval_days"),
     db
-      .from("flashcards")
-      .select("id", { count: "exact", head: true })
-      .gte("interval_days", LEARNED_AFTER_DAYS),
+      .from("study_log")
+      .select("correct")
+      .eq("kind", "card")
+      .gte("created_at", sastMidnight(-6).toISOString()),
     db
       .from("study_log")
       .select("module_id, correct, total, modules(name, color)")
@@ -70,7 +72,19 @@ export async function getProgress(): Promise<Progress> {
       .order("created_at", { ascending: false })
       .limit(500),
   ]);
-  for (const result of [cards, learned, quizzes]) if (result.error) throw result.error;
+  for (const result of [cards, cardRatings, quizzes]) if (result.error) throw result.error;
+
+  const memory = { lockedIn: 0, gettingThere: 0, stillLearning: 0 };
+  for (const card of cards.data ?? []) {
+    if (card.interval_days >= LOCKED_IN_DAYS) memory.lockedIn++;
+    else if (card.interval_days > 0) memory.gettingThere++;
+    else memory.stillLearning++;
+  }
+  const ratings = cardRatings.data ?? [];
+  const cardsThisWeek = {
+    practised: ratings.length,
+    remembered: ratings.filter((rating) => rating.correct > 0).length,
+  };
 
   // Newest first, so the first quiz seen per module is the latest one.
   const byModule = new Map<string, QuizScore>();
@@ -99,8 +113,8 @@ export async function getProgress(): Promise<Progress> {
   return {
     streak: streakFrom(studyDays),
     week,
-    cardsLearned: learned.count ?? 0,
-    cardsTotal: cards.count ?? 0,
+    memory,
+    cardsThisWeek,
     quizzes: [...byModule.values()],
   };
 }
