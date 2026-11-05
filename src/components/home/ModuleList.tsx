@@ -8,12 +8,12 @@ export function ModuleList({ modules }: { modules: StudyModule[] }) {
     <section>
       <div className="flex items-center justify-between pb-3">
         <h2 className="text-xl font-extrabold">Modules</h2>
-        <button
-          type="button"
-          className="border-ink h-11 rounded-full border-2 bg-white px-4 text-[15px] font-extrabold"
+        <Link
+          href="/modules/new"
+          className="border-ink flex h-11 items-center rounded-full border-2 bg-white px-4 text-[15px] font-extrabold"
         >
           + Add
-        </button>
+        </Link>
       </div>
 
       <ul className="flex flex-col gap-3 lg:grid lg:grid-cols-2">

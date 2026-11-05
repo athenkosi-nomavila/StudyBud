@@ -83,3 +83,16 @@ export async function getUploads(moduleId: string): Promise<Upload[]> {
     hasStudy: (row.quiz_questions[0]?.count ?? 0) > 0,
   }));
 }
+
+export type NewModule = { name: string; color: ModuleColor; examDate: string | null };
+
+/** Saves a new module and returns its id. */
+export async function createModule(module: NewModule): Promise<string> {
+  const { data, error } = await db
+    .from("modules")
+    .insert({ name: module.name, color: module.color, exam_date: module.examDate })
+    .select("id")
+    .single();
+  if (error) throw error;
+  return data.id;
+}
