@@ -6,6 +6,7 @@ import { CloseIcon } from "../icons";
 import { ProgressBar } from "../ProgressBar";
 import { ResultCard } from "../ResultCard";
 import { AnswerOption, type AnswerState } from "./AnswerOption";
+import { saveQuizResult } from "@/app/quiz/actions";
 import { shuffleQuiz } from "@/lib/quiz";
 import type { QuizQuestion } from "@/lib/types";
 
@@ -32,6 +33,10 @@ export function QuizRunner({ questions: initialQuestions, subtitle, exitHref }: 
   }
 
   function next() {
+    // Finishing the quiz: save her score in the background for her progress.
+    if (index === questions.length - 1) {
+      saveQuizResult(question.moduleId, score, questions.length).catch(() => {});
+    }
     setPicked(null);
     setIndex((i) => i + 1);
   }
