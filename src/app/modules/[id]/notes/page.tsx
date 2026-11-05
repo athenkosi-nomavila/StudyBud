@@ -19,26 +19,32 @@ export default async function NotesPage({ params }: { params: Promise<{ id: stri
           <span className="text-ink-soft text-[15px] font-semibold">{studyModule.name}</span>
         </div>
 
-        {notes ? (
-          <>
-            <h1 className="text-[44px] leading-none font-extrabold tracking-tight">
-              {notes.title}
-            </h1>
-            <p className="text-[17px] font-semibold">
-              The key ideas from your uploads. Read them, then test yourself.
-            </p>
-            <p className="border-ink bg-butter shadow-pop-sm rounded-[22px] border-2 px-4.5 py-4 text-lg leading-snug font-extrabold">
-              {notes.summary}
-            </p>
-            <KeyIdeaList ideas={notes.keyIdeas} />
-            <p className="text-ink-soft text-[13px] font-semibold">From {notes.source}</p>
-          </>
+        <header>
+          <h1 className="text-[44px] leading-none font-extrabold tracking-tight">Notes</h1>
+          <p className="pt-3 text-[17px] font-semibold">
+            The key ideas from your uploads. Read them, then test yourself.
+          </p>
+        </header>
+
+        {notes.length > 0 ? (
+          notes.map((note) => (
+            <article key={note.id} className="flex flex-col gap-4 pt-2">
+              <h2 className="text-[30px] leading-tight font-extrabold tracking-tight">
+                {note.title}
+              </h2>
+              <p className="border-ink bg-butter shadow-pop-sm rounded-[22px] border-2 px-4.5 py-4 text-lg leading-snug font-extrabold">
+                {note.summary}
+              </p>
+              <KeyIdeaList ideas={note.keyIdeas} />
+              <p className="text-ink-soft text-[13px] font-semibold">From {note.source}</p>
+            </article>
+          ))
         ) : (
           <p className="text-ink-soft text-[15px] font-semibold">No notes yet.</p>
         )}
       </main>
 
-      {notes && (
+      {notes.length > 0 && (
         <div className="fixed inset-x-5 bottom-5 mx-auto flex max-w-md gap-2.5">
           <Link
             href={`/modules/${id}/quiz`}

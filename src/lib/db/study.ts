@@ -4,23 +4,22 @@ import { db } from "./client";
 
 // The study content for a module: notes, quiz questions and flashcards.
 
-export async function getNotes(moduleId: string): Promise<StudyNotes | undefined> {
+/** A module's notes, one set per upload, oldest first. */
+export async function getNotes(moduleId: string): Promise<StudyNotes[]> {
   const { data, error } = await db
     .from("notes")
-    .select("module_id, title, summary, key_ideas, source")
+    .select("id, module_id, title, summary, key_ideas, source")
     .eq("module_id", moduleId)
-    .order("created_at")
-    .limit(1)
-    .maybeSingle();
+    .order("created_at");
   if (error) throw error;
-  if (!data) return undefined;
-  return {
-    moduleId: data.module_id,
-    title: data.title,
-    summary: data.summary,
-    keyIdeas: data.key_ideas as KeyIdea[],
-    source: data.source,
-  };
+  return data.map((row) => ({
+    id: row.id,
+    moduleId: row.module_id,
+    title: row.title,
+    summary: row.summary,
+    keyIdeas: row.key_ideas as KeyIdea[],
+    source: row.source,
+  }));
 }
 
 export async function getQuiz(moduleId: string): Promise<QuizQuestion[]> {

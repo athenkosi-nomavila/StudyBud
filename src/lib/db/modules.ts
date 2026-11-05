@@ -55,6 +55,7 @@ type UploadRow = Pick<Upload, "name" | "kind" | "status"> & {
   id: string;
   module_id: string;
   created_at: string;
+  quiz_questions: { count: number }[];
 };
 
 function uploadStatus(row: UploadRow): Upload["status"] {
@@ -69,7 +70,7 @@ function uploadStatus(row: UploadRow): Upload["status"] {
 export async function getUploads(moduleId: string): Promise<Upload[]> {
   const { data, error } = await db
     .from("uploads")
-    .select("id, module_id, name, kind, status, created_at")
+    .select("id, module_id, name, kind, status, created_at, quiz_questions(count)")
     .eq("module_id", moduleId)
     .order("created_at");
   if (error) throw error;
@@ -79,5 +80,6 @@ export async function getUploads(moduleId: string): Promise<Upload[]> {
     name: row.name,
     kind: row.kind,
     status: uploadStatus(row),
+    hasStudy: (row.quiz_questions[0]?.count ?? 0) > 0,
   }));
 }

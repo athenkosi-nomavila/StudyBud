@@ -16,6 +16,8 @@ export type Upload = {
   name: string;
   kind: UploadKind;
   status: "processing" | "ready" | "failed";
+  /** Notes, quiz and flashcards have been written from it. */
+  hasStudy: boolean;
 };
 
 export type KeyIdea = {
@@ -24,6 +26,7 @@ export type KeyIdea = {
 };
 
 export type StudyNotes = {
+  id: string;
   moduleId: string;
   title: string;
   summary: string;
