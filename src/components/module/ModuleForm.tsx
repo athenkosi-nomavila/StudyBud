@@ -1,16 +1,9 @@
 "use client";
 
-import { useActionState } from "react";
+import { useActionState, useState } from "react";
 import type { ModuleFormState } from "@/app/modules/actions";
-import { moduleBgClass } from "@/lib/colors";
+import { MAIN_COLOR_COUNT, MODULE_COLORS, moduleBgClass } from "@/lib/colors";
 import type { ModuleColor } from "@/lib/types";
-
-const COLORS: { value: ModuleColor; label: string }[] = [
-  { value: "lime", label: "Green" },
-  { value: "sky", label: "Blue" },
-  { value: "butter", label: "Yellow" },
-  { value: "coral", label: "Red" },
-];
 
 const FIELD = "border-ink h-13 rounded-2xl border-2 bg-white px-3.5 text-[17px] font-extrabold";
 
@@ -24,6 +17,11 @@ type Props = {
 
 export function ModuleForm({ action, initial, submitLabel }: Props) {
   const [state, formAction, isPending] = useActionState(action, { message: "" });
+  // Show every colour straight away if the module already uses one of the extras.
+  const usesExtraColor =
+    MODULE_COLORS.findIndex((c) => c.value === initial?.color) >= MAIN_COLOR_COUNT;
+  const [showAllColors, setShowAllColors] = useState(usesExtraColor);
+  const colors = showAllColors ? MODULE_COLORS : MODULE_COLORS.slice(0, MAIN_COLOR_COUNT);
 
   return (
     <form action={formAction} className="flex flex-col gap-5">
@@ -45,8 +43,8 @@ export function ModuleForm({ action, initial, submitLabel }: Props) {
 
       <fieldset className="flex flex-col gap-2">
         <legend className="pb-2 text-[15px] font-extrabold">Colour</legend>
-        <div className="flex gap-3">
-          {COLORS.map(({ value, label }, index) => (
+        <div className="flex flex-wrap gap-3">
+          {colors.map(({ value, label }, index) => (
             <label key={value} className="cursor-pointer">
               <input
                 type="radio"
@@ -61,6 +59,16 @@ export function ModuleForm({ action, initial, submitLabel }: Props) {
               />
             </label>
           ))}
+          {!showAllColors && (
+            <button
+              type="button"
+              onClick={() => setShowAllColors(true)}
+              aria-label="More colours"
+              className="border-ink flex size-13 items-center justify-center rounded-full border-2 border-dashed bg-white text-2xl font-extrabold"
+            >
+              +
+            </button>
+          )}
         </div>
       </fieldset>
 

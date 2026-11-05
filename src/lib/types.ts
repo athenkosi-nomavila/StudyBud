@@ -1,4 +1,16 @@
-export type ModuleColor = "lime" | "sky" | "butter" | "coral";
+export type ModuleColor =
+  | "lime"
+  | "sky"
+  | "butter"
+  | "coral"
+  | "mint"
+  | "aqua"
+  | "periwinkle"
+  | "lilac"
+  | "pink"
+  | "peach"
+  | "sand"
+  | "stone";
 
 export type StudyModule = {
   id: string;
