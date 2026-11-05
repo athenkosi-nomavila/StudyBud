@@ -48,18 +48,36 @@ export async function getModule(id: string): Promise<StudyModule | undefined> {
   return data ? toModule(data as ModuleRow) : undefined;
 }
 
+// Reading a file takes seconds. One still processing after this was cut off, so show it as failed.
+const STUCK_AFTER_MS = 5 * 60 * 1000;
+
+type UploadRow = Pick<Upload, "name" | "kind" | "status"> & {
+  id: string;
+  module_id: string;
+  created_at: string;
+};
+
+function uploadStatus(row: UploadRow): Upload["status"] {
+  // Photos stay processing until the AI step reads them.
+  const isStuck =
+    row.status === "processing" &&
+    row.kind !== "photo" &&
+    Date.now() - new Date(row.created_at).getTime() > STUCK_AFTER_MS;
+  return isStuck ? "failed" : row.status;
+}
+
 export async function getUploads(moduleId: string): Promise<Upload[]> {
   const { data, error } = await db
     .from("uploads")
-    .select("id, module_id, name, kind, status")
+    .select("id, module_id, name, kind, status, created_at")
     .eq("module_id", moduleId)
     .order("created_at");
   if (error) throw error;
-  return data.map((row) => ({
+  return (data as UploadRow[]).map((row) => ({
     id: row.id,
     moduleId: row.module_id,
     name: row.name,
     kind: row.kind,
-    status: row.status,
+    status: uploadStatus(row),
   }));
 }

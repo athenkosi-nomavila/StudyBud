@@ -56,7 +56,7 @@ function UploadRow({ upload }: { upload: Upload }) {
             <span className="bg-lime block h-full w-1/2 animate-pulse" />
           </span>
         ) : upload.status === "failed" ? (
-          <span className="text-[13px] font-semibold">
+          <span className="border-ink bg-coral self-start rounded-lg border-2 px-2 py-0.5 text-[13px] font-extrabold">
             Couldn&apos;t read this. Try a PDF, .docx or .pptx.
           </span>
         ) : (

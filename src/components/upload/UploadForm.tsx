@@ -29,7 +29,10 @@ export function UploadForm({ modules, defaultModuleId }: Props) {
     setIsUploading(true);
     setError("");
     for (const file of files) {
-      const message = await uploadFile(moduleId, file);
+      // A dropped connection throws instead of returning a message.
+      const message = await uploadFile(moduleId, file).catch(
+        () => "Couldn't upload. Check your connection and try again.",
+      );
       if (message) {
         setError(message);
         setIsUploading(false);
@@ -95,7 +98,10 @@ export function UploadForm({ modules, defaultModuleId }: Props) {
       )}
 
       {error && (
-        <p role="alert" className="text-[15px] font-extrabold">
+        <p
+          role="alert"
+          className="border-ink bg-coral rounded-2xl border-2 px-4 py-3 text-[15px] font-extrabold"
+        >
           {error}
         </p>
       )}
