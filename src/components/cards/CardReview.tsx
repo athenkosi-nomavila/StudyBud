@@ -48,6 +48,9 @@ export function CardReview({ cards, subtitle, exitHref }: Props) {
       <header>
         <h1 className="text-[30px] leading-none font-extrabold tracking-tight">Flashcards</h1>
         <p className="text-ink-soft pt-1.5 text-[15px] font-semibold">{subtitle}</p>
+        <p className="pt-3 text-[17px] font-semibold">
+          Test your memory. Answer in your head, then flip to check.
+        </p>
       </header>
 
       {isFinished ? (

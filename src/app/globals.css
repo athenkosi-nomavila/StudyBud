@@ -24,23 +24,26 @@ body {
 }
 
 /*
- * Pressed look: links and buttons sink when tapped, and Pop blocks drop onto their shadow.
+ * Pressed look: links and buttons sink and darken when tapped, and Pop blocks drop onto their
+ * shadow. PressFeedback sets data-pressed on touch; :active covers mouse clicks.
  * Kept outside Tailwind's layers so it wins over the shadow utilities.
  */
 :is(a, button) {
   -webkit-tap-highlight-color: transparent;
   transition:
-    translate 80ms ease-out,
-    box-shadow 80ms ease-out;
+    translate 100ms ease-out,
+    box-shadow 100ms ease-out,
+    filter 100ms ease-out;
 }
-:is(a, button):not(:disabled):active {
+:is(a, button):is([data-pressed], :active):not(:disabled) {
   translate: 2px 2px;
+  filter: brightness(0.9);
 }
-:is(a, button):is(.shadow-pop-sm):not(:disabled):active {
+:is(a, button).shadow-pop-sm:is([data-pressed], :active):not(:disabled) {
   translate: 4px 4px;
   box-shadow: none;
 }
-:is(a, button):is(.shadow-pop):not(:disabled):active {
+:is(a, button).shadow-pop:is([data-pressed], :active):not(:disabled) {
   translate: 5px 5px;
   box-shadow: none;
 }

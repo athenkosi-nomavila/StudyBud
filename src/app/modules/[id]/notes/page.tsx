@@ -23,6 +23,9 @@ export default async function NotesPage({ params }: { params: Promise<{ id: stri
             <h1 className="text-[44px] leading-none font-extrabold tracking-tight">
               {notes.title}
             </h1>
+            <p className="text-[17px] font-semibold">
+              The key ideas from your uploads. Read them, then test yourself.
+            </p>
             <p className="border-ink bg-butter shadow-pop-sm rounded-[22px] border-2 px-4.5 py-4 text-lg leading-snug font-extrabold">
               {notes.summary}
             </p>
